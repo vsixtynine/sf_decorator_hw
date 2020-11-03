@@ -84,19 +84,39 @@ num_runs = ask_runs()
 seq_num = ask_sequence_num()
 
 
-''' функция расчета последовательности фибоначчи декорируемая классом '''
+''' функция расчета последовательности фибоначчи декорируемая объектом класса
+    заккоментируйте если необходимо проверить код конекстного менеджера ниже 
+'''
 @TimeCalc(name="таймер функции фибоначчи", runs=num_runs)
 def fibo(num):
     n1, n2 = 0, 1
     if num == 0:
         return n1
     if num == 1:
-        return n2
-
+       return n2
     for _ in range(1, num):
-        n1, n2 = n2, n1 + n2
-
+       n1, n2 = n2, n1 + n2
     return n2
 
+
+''' функция расчета последовательности фибоначчи расчитываемая контекстным менеджером
+    раскоментируйте для проверки, закомментировав код выше
+'''
+'''
+with TimeCalc(name="test", runs=num_runs) as tc:
+    @tc
+    def fibo(num):
+        n1, n2 = 0, 1
+        if num == 0:
+            return n1
+        if num == 1:
+            return n2
+
+        for _ in range(1, num):
+            n1, n2 = n2, n1 + n2
+
+        return n2
+
+'''    
 
 print("\nЧисло фибоначчи:", fibo(seq_num))
