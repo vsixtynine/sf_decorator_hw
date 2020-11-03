@@ -18,7 +18,7 @@ class ContextDecorator(object):
     def __call__(self, func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            ''' запускаем контекстный менеджер '''
+            ''' запускаем контекстный менеджер класса TimeCalc '''
             with self:
                 print(f"\nЗапускаю {self._name} {self._runs} раз")
 
@@ -37,13 +37,19 @@ class TimeCalc(ContextDecorator):
     ''' калькулятор выполнения функции '''
 
     def __enter__(self):
+        '''Фиксируем время запуска декорируемой функции'''
+        
         self.start = time.time()
         return self
 
     def __exit__(self, ex_ty, ex_va, ex_tb):
-
+        '''Фиксируем время окончания после всех итераций'''
+        
         self.end = time.time()
         self.time_delta = self.end - self.start
+        
+        
+        '''делим общее время работы на количество итераций'''
         self.time = self.time_delta / num_runs
 
         print("\nСреднее время исполнения: %.6f с." % self.time)
@@ -73,11 +79,12 @@ def ask_sequence_num():
         else:
             return answer
 
-
+''' Запрашиваем данные для расчета '''
 num_runs = ask_runs()
 seq_num = ask_sequence_num()
 
 
+''' функция расчета последовательности фибоначчи декорируемая классом '''
 @TimeCalc(name="таймер функции фибоначчи", runs=num_runs)
 def fibo(num):
     n1, n2 = 0, 1
